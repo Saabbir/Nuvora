@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "shopify theme dev",
-    "sass": "sass ./src/scss/index.scss:./assets/bundle.css --watch"
+    "sass:dev": "sass --embed-source-map ./src/scss/index.scss:./assets/bundle.css --watch",
+    "sass:prod": "sass ./src/scss/index.scss:./assets/bundle.css --watch"
   },
   "keywords": [],
   "author": "",

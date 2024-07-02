@@ -1,11 +1,28 @@
+{% liquid
+  capture item_or_items
+    if cart.item_count == 0
+      echo 'item'
+    else
+      echo 'items'
+    endif
+  endcapture
+%}
+
 <div class="c-cart-modal-wrapper">
   <div class="c-cart-modal">
     <!-- Cart header -->
     <div class="c-cart-modal__header">
-      <h3 class="c-cart-modal__header-title">Cart</h3>
+      <h3 class="c-cart-modal__header-title">Your cart</h3>
       <div class="c-cart-modal__header-right">
-        <div class="c-cart-modal__total-items">0 item</div>
-        <div class="c-cart-modal__close-icon">x</div>
+        <div class="c-cart-modal__total-items">
+          {{ cart.item_count }}
+          {{ item_or_items }}
+        </div>
+        <div class="c-cart-modal__close-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 50 50">
+            <path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"></path>
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -24,9 +41,21 @@
                 <div class="c-cart-modal__line-item-title">{{ item.title }}</div>
                 <div class="c-cart-modal__line-item-variant-title">{{ item.variant.title }}</div>
                 <div class="c-cart-modal__line-item-qty">
-                  <button class="c-cart-modal__line-item-qty-plus">+</button>
+                  <button class="c-cart-modal__line-item-qty-plus">
+                    <img
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAANklEQVR4nGNgGGngPxSPWoAT/B8NIkLg/8gOov9UxvS3YOjHATHg/6gFhMD/0SAa8CBiGHQAAOITS7WQXzPpAAAAAElFTkSuQmCC"
+                      width="16"
+                      height="16"
+                    >
+                  </button>
                   <input type="text" readonly value="{{ item.quantity }}">
-                  <button class="c-cart-modal__line-item-qty-minus">-</button>
+                  <button class="c-cart-modal__line-item-qty-minus">
+                    <img
+                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIUlEQVR4nGNgGAWjYBSMApLBfyrhgbNgFIyCUTAKGDABAOkcI91xODUvAAAAAElFTkSuQmCC"
+                      width="16"
+                      height="16"
+                    >
+                  </button>
                 </div>
               </div>
               <div class="c-cart-modal__line-item-final-price">{{ item.final_line_price | money }}</div>
