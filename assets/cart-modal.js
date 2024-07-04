@@ -70,12 +70,14 @@ class CartModal extends HTMLElement {
     });
     const { sections } = await res.json();
     this.updateCartModal(sections["section-cart-modal"]);
+    this.updateNavCartCount(0);
   }
 
   async handleAddToCartFormSubmit(e) {
     e.preventDefault();
+    const form = e.target;
 
-    const body = new FormData(e.target);
+    const body = new FormData(form);
     body.append("sections", "section-cart-modal");
 
     try {
@@ -96,19 +98,21 @@ class CartModal extends HTMLElement {
   }
 
   async updateNavCartCount(count) {
-    console.log("Saabbir:", "updateNavCartCount fn ran", count);
-
     if (count === undefined) {
       const { item_count } = await (await fetch("/cart.js")).json();
       count = item_count;
     }
 
     const supEl = this.navCartLinkEl.querySelector("sup");
-    if (supEl) {
-      console.log("Saabbir:", "inside if", count);
 
+    if (supEl) {
       supEl.textContent = count;
-      supEl.dataset.isCartEmpty = count > 0 ? "no" : "yes";
+
+      if (count >= 1) {
+        supEl.classList.remove("is-empty");
+      } else {
+        supEl.classList.add("is-empty");
+      }
     }
   }
 

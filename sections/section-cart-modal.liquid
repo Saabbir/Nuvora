@@ -96,6 +96,7 @@
             <span class="c-cart-modal__subtotal-price">{{ cart.items_subtotal_price | money }}</span>
           </div>
           <div class="c-cart-modal__footer-buttons">
+            <a href="{{ routes.cart_url }}" class="c-btn">View cart</a>
             <form action="/cart" method="post" novalidate>
               <button class="c-btn c-btn--black c-btn--full" type="submit" name="checkout">Checkout</button>
             </form>

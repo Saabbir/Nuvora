@@ -156,7 +156,7 @@
       top: 0;
       width: 16px;
 
-      &[data-is-cart-empty="yes"] {
+      &.is-empty {
         display: none;
       }
     }

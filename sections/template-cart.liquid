@@ -21,7 +21,7 @@
             </thead>
             <tbody>
               {% for item in cart.items %}
-                <tr>
+                <tr data-line-item-key="{{ item.key }}">
                   <td>
                     <div class="c-cart-page__product">
                       <a class="c-cart-page__product-img-link" href="{{ item.url }}">
@@ -74,7 +74,7 @@
               <span class="u-text-gray u-text-normal">Subtotal:</span>
               <strong>{{ cart.total_price | money }}</strong>
             </h3>
-            <div><button class="c-btn c-btn--full" type="submit" name="update">Update</button></div>
+            {% comment %} <div><button class="c-btn c-btn--full" type="submit" name="update">Update</button></div> {% endcomment %}
             <div class="u-mt-16">
               <button class="c-btn c-btn--black c-btn--full" type="submit" name="checkout">Checkout</button>
             </div>
@@ -91,6 +91,88 @@
     {% endif %}
   </div>
 </div>
+
+<script>
+  document.body.addEventListener('change', function (e) {
+    if (e.target.closest('.c-cart-page__quantity-input')) {
+      const inputEl = e.target.closest('.c-cart-page__quantity-input');
+
+      const newQty = parseInt(inputEl.value);
+      const lineItemKey = inputEl.closest('[data-line-item-key]').dataset.lineItemKey;
+
+      updateLineItem(newQty, lineItemKey, inputEl);
+    }
+  });
+
+  async function updateLineItem(newQty, lineItemKey, inputEl) {
+    function jsonPostOptions(payload) {
+      return {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+    }
+
+    function getHtml(htmlText) {
+      return new DOMParser().parseFromString(htmlText, 'text/html');
+    }
+
+    function replaceHtml(selectors, html) {
+      for (const selector of selectors) {
+        const targetElement = document.querySelector(selector);
+        const sourceElement = html.querySelector(selector);
+        if (targetElement && sourceElement) {
+          targetElement.replaceWith(sourceElement);
+        }
+      }
+    }
+
+    async function updateNavCartCount(count) {
+      if (count === undefined) {
+        const { item_count } = await (await fetch('/cart.js')).json();
+        count = item_count;
+      }
+
+      const supEl = document.querySelector(`.c-header__nav-cart-link[href="/cart"] sup`);
+
+      if (supEl) {
+        supEl.textContent = count;
+
+        if (count >= 1) {
+          supEl.classList.remove('is-empty');
+        } else {
+          supEl.classList.add('is-empty');
+        }
+      }
+    }
+
+    const payload = {
+      id: lineItemKey,
+      quantity: newQty,
+      sections: 'template-cart',
+    };
+
+    try {
+      const res = await fetch('/cart/change.js', jsonPostOptions(payload));
+      const data = await res.json();
+
+      if (data.message) {
+        throw Error(data.message);
+      }
+
+      const { sections, item_count } = data;
+      sections && replaceHtml(['.c-cart-page'], getHtml(sections['template-cart']));
+      updateNavCartCount(item_count);
+    } catch (error) {
+      alert(error.message);
+      console.error('Saabbir:', 'error.message', error.message);
+    } finally {
+      inputEl.value = inputEl.defaultValue;
+    }
+  }
+</script>
 
 {% schema %}
 {

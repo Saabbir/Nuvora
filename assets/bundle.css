@@ -412,7 +412,7 @@ label {
   top: 0;
   width: 16px;
 }
-.c-header__nav-cart-link sup[data-is-cart-empty=yes] {
+.c-header__nav-cart-link sup.is-empty {
   display: none;
 }
 .c-header a[data-customer-name] {
@@ -1429,11 +1429,11 @@ label {
 }
 .c-cart-modal__subtotal-label {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
 }
 .c-cart-modal__subtotal-price {
   font-size: 22px;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .c-object-type {

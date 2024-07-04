@@ -21,6 +21,10 @@ void (function () {
     if (clickEvent.target.closest(".c-search-container")) {
       // clickEvent.preventDefault();
     }
+
+    /**
+     * Handle icon search click
+     */
     if (
       clickEvent.target.closest(".c-search-container") &&
       !clickEvent.target.closest(".c-search-form")
