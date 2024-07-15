@@ -59,9 +59,28 @@
       ],
       "settings": {
       }
+    },
+    "1721045881f5baec2f": {
+      "type": "apps",
+      "blocks": {
+        "add_to_wishlist_add_to_wishlist_pTDQ4A": {
+          "type": "shopify:\/\/apps\/add-to-wishlist\/blocks\/add-to-wishlist\/3b77b344-a99a-4100-970f-53f59d6140dc",
+          "settings": {
+            "text": "Add to wishlist",
+            "text_after_wishlisted": "Added to wishlist",
+            "fill_color": "#1C274C"
+          }
+        }
+      },
+      "block_order": [
+        "add_to_wishlist_add_to_wishlist_pTDQ4A"
+      ],
+      "settings": {
+      }
     }
   },
   "order": [
-    "template"
+    "template",
+    "1721045881f5baec2f"
   ]
 }
