@@ -66,23 +66,66 @@
             {% when 'variant_selector' %}
               {% unless product.has_only_default_variant %}
                 <variant-selector data-url="{{ product.url }}" data-section="{{ section.id }}">
-                  {% for option in product.options_with_values %}
-                    <div class="u-my-16">
-                      <label for="{{ option.name }}-variant-dropdown">{{ option.name }}</label>
-                      <select name="options[{{ option.name }}]" id="{{ option.name }}-variant-dropdown">
-                        {% for value in option.values %}
-                          <option
-                            value="{{ value }}"
-                            {% if option.selected_value == value %}
-                              selected="selected"
-                            {% endif %}
-                          >
-                            {{ value }}
-                          </option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  {% endfor %}
+                  {% if block.settings.dropdown_style %}
+                    {% for option in product.options_with_values %}
+                      <div class="u-my-16">
+                        <label for="{{ option.name }}-variant-dropdown">{{ option.name }}</label>
+                        <select name="options[{{ option.name }}]" id="{{ option.name }}-variant-dropdown">
+                          {% for value in option.values %}
+                            <option
+                              value="{{ value }}"
+                              {% if option.selected_value == value %}
+                                selected="selected"
+                              {% endif %}
+                            >
+                              {{ value }}
+                            </option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endfor %}
+                  {% else %}
+                    {% for option in product.options_with_values %}
+                      <div class="u-my-32">
+                        <label for="{{ option.name }}-variant-radio">{{ option.name }}</label>
+                        <ul class="c-product-variant-swatches">
+                          {% for value in option.values %}
+                            {% assign is_variant_available = false %}
+                            {% for variant in product.variants %}
+                              {% if variant.options contains value and variant.available %}
+                                {% assign is_variant_available = true %}
+                                {% break %}
+                              {% endif %}
+                            {% endfor %}
+                    
+                            <li class="c-product-variant-swatch">
+                              <input
+                                type="radio"
+                                name="options[{{ option.name }}]"
+                                id="{{ option.name }}-variant-radio-{{ value }}"
+                                value="{{ value }}"
+                                {% if option.selected_value == value %}
+                                  checked="checked"
+                                {% endif %}
+                                {% unless is_variant_available %}
+                                  disabled="disabled"
+                                {% endunless %}
+                                class="u-hidden"
+                              >
+                              <label
+                                for="{{ option.name }}-variant-radio-{{ value }}"
+                                {% unless is_variant_available %}
+                                  style="text-decoration: line-through; opacity: 0.5;"
+                                {% endunless %}
+                              >
+                                {{ value }}
+                              </label>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    {% endfor %}      
+                  {% endif %}
 
                   <script type="application/json" id="product_variants">
                     {{- product.variants | json -}}
@@ -170,7 +213,15 @@
     {
       "type": "variant_selector",
       "name": "Variant Selector",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "dropdown_style",
+          "label": "Dropdown style?",
+          "default": true
+        }
+      ]
     },
     {
       "type": "quantity",

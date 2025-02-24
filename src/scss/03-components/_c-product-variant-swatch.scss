@@ -1,0 +1,28 @@
+ul.c-product-variant-swatches {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+li.c-product-variant-swatch {
+  display: inline-flex;
+
+  & > label {
+    margin: 0;
+    line-height: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    min-width: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  input:checked + label {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+}

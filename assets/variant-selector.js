@@ -8,20 +8,34 @@ class VariantSelector extends HTMLElement {
     const productVariants = JSON.parse(
       this.querySelector("#product_variants").textContent
     );
-    const selectedOptions = Array.from(
+
+    // Get selected options from select elements
+    let selectedOptions = Array.from(
       this.querySelectorAll("select"),
       (selectEl) => selectEl.value
     ).join(" / ");
+
+    // Get selected options from radio elements if select elements are not available
+    if (!selectedOptions) {
+      selectedOptions = Array.from(
+        this.querySelectorAll("input[type='radio']:checked"),
+        (radioEl) => radioEl.value
+      ).join(" / ");
+    }
+
     const variant = productVariants.find(
       (variant) => variant.title === selectedOptions
     );
-    console.log("Saabbir:", "variant", variant);
 
-    // console.log('Saabbir:', 'selectedOptions', selectedOptions);
-    // console.log('Saabbir:', 'variant', variant);
+    console.log('Saabbir:', 'selectedOptions', selectedOptions);
+    console.log('Saabbir:', 'variant', variant);
 
-    // Set variant id
-    document.querySelector('input[name="id"]').value = variant.id;
+    if (!variant) {
+      return console.error("Saabbir: Variant not found");
+    }
+
+    // Set shopify product form variant id
+    document.querySelector('.shopify-product-form input[name="id"]').value = variant.id;
 
     // Update current url with variant id
     window.history.replaceState({}, "", `?variant=${variant.id}`);
