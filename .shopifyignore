@@ -1,9 +1,25 @@
+# Development files
 .gitignore
 node_modules
 package.json
 package-lock.json
 README.md
-assets/bundle.css.map
 src
+
+# Source maps
+assets/bundle.css.map
+
+# Screenshots and archives
 Screenshot.png
 *.zip
+*.tar.gz
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
